@@ -6,24 +6,23 @@ import { getProducts } from "./services/productService";
 
 export default function App() {
   /* 
-  Defining two state variables using the useState hook: "size" and "products".
-  "size" will be used to filter the products list based on size,
-  and "products" will hold an array of product data fetched from the getProducts function.
+    Defining state variables using the useState hook.
   */
   const [size,setSize] = useState("");
   const [products,setProducts] = useState([]);
+  const [error,setError] = useState(null);
   
   /*
-  Using the useEffect hook to fetch product data from the server when the component mounts. 
-  This function will be called only once when the component mounts because of 
-  the empty dependency array provided as the second argument to useEffect
+    Using the useEffect hook to fetch data from the server when the component mounts. 
   */
   useEffect (()=> {
-    getProducts("shoes").then ((response)=> setProducts(response));
+    getProducts("shoes")
+    .then((response)=> setProducts(response))
+    .catch((err)=> setError(err));
   },[]);
   
   /*
-  Defining a helper that returns a div element with product details
+    Defining a helper that returns a div element with product details
   */ 
   function renderProduct(p) {
     return (
@@ -37,11 +36,16 @@ export default function App() {
     );
   }
   /*
-  Using the conditional operator to filter the products array based on the selected size. 
-  If no size is selected, all products will be displayed
+    Using the conditional operator to filter the products array based on the selected size. 
+    If no size is selected, all products will be displayed
   */
   const filtredProducts = size ? products.filter(p => p.skus.find((s)=> s.size === parseInt(size) ) ):products;
-
+ 
+  /*
+    Display error
+  */
+  if( error) throw error;
+ 
   return (
     <>
       <div className="content">
