@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Footer from "./Footer";
 import Header from "./Header";
-import { getProducts } from "./services/productService";
+import useFetch from "./services/useFetch";
 import Spinner from "./Spinner";
 
 export default function App() {
@@ -10,27 +10,11 @@ export default function App() {
     Defining state variables using the useState hook.
   */
   const [size, setSize] = useState("");
-  const [products, setProducts] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  /*
-    Using the useEffect hook to fetch data from the server when the component mounts. 
-  */
-  useEffect(() => {
-    async function init() {
-      try {
-        const response = await getProducts("shoes");
-        setProducts(response);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    init();
-  }, []);
+  const {
+    data: products,
+    error,
+    loading,
+  } = useFetch("products?category=shoes");
 
   /*
     Defining a helper that returns a div element with product details
