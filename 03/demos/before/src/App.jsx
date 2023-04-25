@@ -40,7 +40,7 @@ export default function App() {
   Using the conditional operator to filter the products array based on the selected size. 
   If no size is selected, all products will be displayed
   */
-  const filtredProducts = size ? products.filter(p => p.skus.find((s)=> s.size == parseInt(size) ) ):products;
+  const filtredProducts = size ? products.filter(p => p.skus.find((s)=> s.size === parseInt(size) ) ):products;
 
   return (
     <>
