@@ -10,6 +10,10 @@ export default function App() {
     Defining state variables using the useState hook.
   */
   const [size, setSize] = useState("");
+
+  /*
+    Using the useEffect hook to fetch data from the server when the component mounts. 
+  */
   const {
     data: products,
     error,
