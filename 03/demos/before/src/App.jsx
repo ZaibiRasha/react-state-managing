@@ -1,48 +1,30 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import "./App.css";
 import Footer from "./Footer";
 import Header from "./Header";
-const products = [
-  {
-    "id": 1,
-    "category": "shoes",
-    "image": "shoe1.jpg",
-    "name": "Hiker",
-    "price": 94.95,
-    "skus": [
-      { "sku": "17", "size": 7 },
-      { "sku": "18", "size": 8 }
-    ],
-    "description": "This rugged boot will get you up the mountain safely."
-  },
-  {
-    "id": 2,
-    "category": "shoes",
-    "image": "shoe2.jpg",
-    "name": "Climber",
-    "price": 78.99,
-    "skus": [
-      { "sku": "28", "size": 8 },
-      { "sku": "29", "size": 9 }
-    ],
-    "description": "Sure-footed traction in slippery conditions."
-  },
-  {
-    "id": 3,
-    "category": "shoes",
-    "image": "shoe3.jpg",
-    "name": "Explorer",
-    "price": 145.95,
-    "skus": [
-      { "sku": "37", "size": 7 },
-      { "sku": "38", "size": 8 },
-      { "sku": "39", "size": 9 }
-    ],
-    "description": "Look stylish while stomping in the mud."
-  }
-]
+import { getProducts } from "./services/productService";
+
 export default function App() {
+  /* 
+  Defining two state variables using the useState hook: "size" and "products".
+  "size" will be used to filter the products list based on size,
+  and "products" will hold an array of product data fetched from the getProducts function.
+  */
   const [size,setSize] = useState("");
+  const [products,setProducts] = useState([]);
+  
+  /*
+  Using the useEffect hook to fetch product data from the server when the component mounts. 
+  This function will be called only once when the component mounts because of 
+  the empty dependency array provided as the second argument to useEffect
+  */
+  useEffect (()=> {
+    getProducts("shoes").then ((response)=> setProducts(response));
+  },[]);
+  
+  /*
+  Defining a helper that returns a div element with product details
+  */ 
   function renderProduct(p) {
     return (
       <div key={p.id} className="product">
@@ -54,6 +36,10 @@ export default function App() {
       </div>
     );
   }
+  /*
+  Using the conditional operator to filter the products array based on the selected size. 
+  If no size is selected, all products will be displayed
+  */
   const filtredProducts = size ? products.filter(p => p.skus.find((s)=> s.size == parseInt(size) ) ):products;
 
   return (
